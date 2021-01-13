@@ -1,55 +1,54 @@
-import React, { useState } from 'react'
-import { Answers } from '../../../../models/answers.model'
-import { Card, Margin } from '../../../shared'
-import { AddButton } from '../styled/AddButton'
-import { AddAnswer } from '../utils/AddAnswar'
-import { InputQuiz } from './InputQuiz'
+import React from 'react'
+import styled from 'styled-components'
+import { InputQuestion } from './InputQuestion'
 
 interface Props {
-  placeholder: string
+  title: string
+  setTitle: React.Dispatch<React.SetStateAction<string>>
+  description: string
+  setDescription: React.Dispatch<React.SetStateAction<string>>
 }
 
-export const QuizForm: React.FC<Props> = ({ placeholder }) => {
-  const [temp, setTemp] = useState('')
-  const [tempCheck, setTempCheck] = useState(false)
-  const [answers, setAnswers] = useState<Answers[]>([
-    {
-      id: 0,
-      checked: true,
-      placeholder: '1. Your answers.',
-      data: ''
-    }
-  ])
+interface InputQuizProps {
+  fontSize?: string
+  fontWeight?: string
+}
 
-  const addAnswer = () => {
-    const d = {
-      id: answers.length,
-      checked: tempCheck,
-      placeholder: `${answers.length + 1}. Your answer.`,
-      data: temp
-    }
-    setTemp('')
-    setTempCheck(false)
-    setAnswers(prev => [...prev, d])
-    console.log(answers)
+const QuizFormContainer = styled.div`
+  margin-bottom: 24px;
+`
+
+const InputQuiz = styled(InputQuestion)<InputQuizProps>`
+  color: ${props => props.theme.primary.text};
+  margin-top: 0;
+  font-size: ${props => props.fontSize || '24px'};
+  font-weight: ${props => props.fontWeight || '700'};
+
+  &&::placeholder {
+    color: ${props => props.theme.text.grey};
   }
+`
 
+export const QuizForm: React.FC<Props> = ({
+  title,
+  setTitle,
+  description,
+  setDescription
+}) => {
   return (
-    <Margin value="0 0 24px 0">
-      <Card shadow>
-        <InputQuiz placeholder={placeholder} />
-        {answers.map(({ id, checked, placeholder, data }) => (
-          <AddAnswer
-            key={id}
-            checked={checked}
-            setChecked={setTempCheck}
-            placeholder={placeholder}
-            data={data}
-            setData={setTemp}
-          />
-        ))}
-        <AddButton onClick={addAnswer} />
-      </Card>
-    </Margin>
+    <QuizFormContainer>
+      <InputQuiz
+        placeholder="Title of the Quiz?"
+        value={title}
+        onChange={event => setTitle(event.target.value)}
+      />
+      <InputQuiz
+        fontSize="18px"
+        fontWeight="400"
+        placeholder="Description"
+        value={description}
+        onChange={event => setDescription(event.target.value)}
+      />
+    </QuizFormContainer>
   )
 }

@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-export const InputQuiz = styled.input`
+export const InputQuestion = styled.input`
   font-size: 14px;
   border: none;
   background: none;
